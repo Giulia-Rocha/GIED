@@ -1,18 +1,18 @@
 package com.dasa.gied.dao.jdbc;
 
 import com.dasa.gied.dao.MaterialDao;
-import com.dasa.gied.domain.model.Material;
+import com.dasa.gied.domain.model.Item;
 
 import java.util.List;
 
 public class JdbcMaterialDao implements MaterialDao {
     @Override
-    public Long salvar(Material material) {
+    public Long salvar(Item item) {
         return 0L;
     }
 
     @Override
-    public void atualizar(Material material) {
+    public void atualizar(Item item) {
 
     }
 
@@ -22,12 +22,12 @@ public class JdbcMaterialDao implements MaterialDao {
     }
 
     @Override
-    public Material getById(Long id) {
+    public Item getById(Long id) {
         return null;
     }
 
     @Override
-    public List<Material> lisarTodos() {
+    public List<Item> lisarTodos() {
         return List.of();
     }
 }

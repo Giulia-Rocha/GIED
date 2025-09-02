@@ -1,6 +1,6 @@
 package com.dasa.gied.view;
 
-import com.dasa.gied.domain.model.Material;
+import com.dasa.gied.domain.model.Item;
 
 import javax.swing.*;
 import java.util.List;
@@ -49,7 +49,7 @@ public class SistemaView {
         JOptionPane.showMessageDialog(null, detalhes, "Detalhes do Material", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void mostrarListaMateriais(List<Material> materiais, String titulo) {
+    public void mostrarListaMateriais(List<Item> materiais, String titulo) {
         if (materiais.isEmpty()) {
             mostrarMensagem("Nenhum material encontrado.");
             return;
@@ -58,7 +58,7 @@ public class SistemaView {
         StringBuilder lista = new StringBuilder();
         lista.append("--- ").append(titulo).append(" ---\n\n");
 
-        for (Material m : materiais) {
+        for (Item m : materiais) {
             lista.append(m.getDescricaoCompleta()).append("\n-------------------------\n");
         }
 
