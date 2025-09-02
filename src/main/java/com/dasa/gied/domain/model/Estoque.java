@@ -18,7 +18,7 @@ public class Estoque {
         if(this.quantidadeAtual - quantidade >= quantidade){
             this.quantidadeAtual -= quantidade;
         }else{
-            throw new IllegalStateException("Estoque insuficiente para o item" + this.idItem);
+            throw new IllegalStateException("Estoque insuficiente para o item: " + this.idItem);
         }
     }
 
