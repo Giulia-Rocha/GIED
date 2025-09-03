@@ -10,4 +10,5 @@ public interface ItemDao {
     void delete(Long id);
     Item getById(Long id);
     List<Item> lisarTodos();
+    List<Item> findByEstoqueBaixo();
 }

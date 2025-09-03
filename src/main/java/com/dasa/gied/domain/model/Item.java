@@ -1,4 +1,7 @@
 package com.dasa.gied.domain.model;
+
+import java.util.Date;
+
 /**
  * Representa um item genérico no estoque.
  * Classe pai no modelo de herança.
@@ -6,20 +9,23 @@ package com.dasa.gied.domain.model;
 public class Item {
 
     private Long id;
-    private String name;
-    private String description;
+    private String nome;
+    private String descricao;
     private Integer nivelMinEstoque;
+    private Integer quantidadeAtual;
 
-    public Item(Long id, String name, String description, Integer nivelMinEstoque) {
+    public Item(Long id, String nome, String descricao, Integer nivelMinEstoque, Integer quantidadeAtual) {
         this.id = id;
-        this.name = name;
-        this.description = description;
+        this.nome = nome;
+        this.descricao = descricao;
         this.nivelMinEstoque = nivelMinEstoque;
+        this.quantidadeAtual = quantidadeAtual;
     }
 
     public void verificarEstoque(){
 
     }
+
 
     public Long getId() {
         return id;
@@ -29,20 +35,20 @@ public class Item {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public Integer getNivelMinEstoque() {
@@ -51,5 +57,13 @@ public class Item {
 
     public void setNivelMinEstoque(Integer nivelMinEstoque) {
         this.nivelMinEstoque = nivelMinEstoque;
+    }
+    
+    public Integer getQuantidadeAtual() {
+        return quantidadeAtual;
+    }
+
+    public void setQuantidadeAtual(Integer quantidadeAtual) {
+        this.quantidadeAtual = quantidadeAtual;
     }
 }
