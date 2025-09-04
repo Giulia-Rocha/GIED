@@ -16,7 +16,22 @@ public class ItemService {
         this.loteEstoqueDao = loteEstoqueDao;
     }
 
-    public void registrarEntrada(Long idItem, int quantidade, LoteEstoqueDao loteEstoqueDao, Date dataValidade){
+    public void registrarEntrada(Long idItem, int quantidade, String numeroLote,Date dataValidade){
+        //validações de entrada
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+        }
+        if (numeroLote == null || numeroLote.trim().isEmpty()) {
+            throw new IllegalArgumentException("O número do lote é obrigatório.");
+        }
+
+        // Regra de Negócio
+        Item item = itemDao.getById(idItem);
+        if(item==null){
+            throw new IllegalStateException("Produto com ID " + idItem + " não encontrado no catálogo. Cadastre o produto primeiro.");
+        }
+
+        loteEstoqueDao.findByItemAndId(idItem,)
 
     }
     public void RegistrarSaida(Long idItem, int quantidade){}
