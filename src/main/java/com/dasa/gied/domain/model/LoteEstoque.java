@@ -1,7 +1,7 @@
 package com.dasa.gied.domain.model;
 
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class LoteEstoque {
     private Long id;
@@ -44,7 +44,7 @@ public class LoteEstoque {
         this.lote = lote;
     }
 
-    public LocalDate getDataValidade() {
+    public Date getDataValidade() {
         return dataValidade;
     }
 
