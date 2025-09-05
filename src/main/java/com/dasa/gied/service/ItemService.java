@@ -4,8 +4,10 @@ import com.dasa.gied.dao.ItemDao;
 import com.dasa.gied.dao.LoteEstoqueDao;
 import com.dasa.gied.domain.model.Item;
 import com.dasa.gied.domain.model.LoteEstoque;
+import com.dasa.gied.service.dto.ConsultaEstoqueDTO;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemService {
@@ -36,7 +38,7 @@ public class ItemService {
                 .ifPresentOrElse(
                         loteExistente ->{
                             if(!loteExistente.getDataValidade().equals(dataValidade)){
-                                throw new IllegalStateException("Inconsistência de dados: a data de validade do lote não corresponde à já cadastrada.")
+                                throw new IllegalStateException("Inconsistência de dados: a data de validade do lote não corresponde à já cadastrada.");
                             }
                             loteExistente.setQuantidade(loteExistente.getQuantidade()+quantidade);
                             loteEstoqueDao.atualizar(loteExistente);
@@ -49,10 +51,51 @@ public class ItemService {
 
     }
     public void RegistrarSaida(Long idItem, int quantidade){
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+        }
 
+        List<LoteEstoque> lotesOrdenados = loteEstoqueDao.findByItemOrderByValidadeAsc(idItem);
+
+        int estoqueTotal = lotesOrdenados.stream()
+                .mapToInt(LoteEstoque::getQuantidade)
+                .sum();
+        if(estoqueTotal <= quantidade){
+            throw new IllegalStateException("Estoque insuficiente. Total disponivel " + estoqueTotal + ".");
+        }
+        int quantidadeFinal = quantidade;
+
+        for (LoteEstoque lote : lotesOrdenados) {
+            if(lote.getQuantidade() >= quantidadeFinal){
+                lote.setQuantidade(lote.getQuantidade() - quantidadeFinal);
+                quantidadeFinal = 0;
+                loteEstoqueDao.atualizar(lote);
+                break;
+            }else{
+                quantidadeFinal -= lote.getQuantidade();
+                lote.setQuantidade(0);
+                loteEstoqueDao.atualizar(lote);
+            }
+        }
+        if(quantidadeFinal > 0){
+            throw new RuntimeException("Erro inesperado no cálculo de baixa de estoque. Estoque insuficiente.");
+        }
+    }
+    public List<LoteEstoque> ConsultarEstoque(Long idItem){
+        //1. validação do id
+        Item item = itemDao.getById(idItem);
+        if(item==null){
+            throw new IllegalStateException("Item com Id "+idItem+" não encontrado.");
+        }
+        //2.pede ao dao para buscar a lista de items com esse id
+        List<LoteEstoque> lotes = loteEstoqueDao.findByItemOrderByValidadeAsc(idItem);
+        return new ConsultaEstoqueDTO(item, lotes).lotes();
 
     }
-    public Item ConsultarEstoque(Long idItem){}
-    public List<Item> listarEstoque(){}
-    public List<Item> listarEstoqueBaixo(){}
+    public List<Item> listarEstoque(){
+       return itemDao.lisarTodos();
+    }
+    public List<Item> listarEstoqueBaixo(){
+        return itemDao.findByEstoqueBaixo();
+    }
 }
