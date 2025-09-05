@@ -44,7 +44,7 @@ public class LoteEstoque {
         this.lote = lote;
     }
 
-    public Date getDataValidade() {
+    public LocalDate getDataValidade() {
         return dataValidade;
     }
 

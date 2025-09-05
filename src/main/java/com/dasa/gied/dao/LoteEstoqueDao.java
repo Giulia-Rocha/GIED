@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface LoteEstoqueDao {
     Optional<LoteEstoque> findByItemAndId(Long idItem, String numeroLote);
     void salvar(LoteEstoque loteEstoque);
-    void atualizar(LoteEstoque loteEstoque);
+    int atualizar(LoteEstoque loteEstoque);
     List<LoteEstoque> findByItemOrderByValidadeAsc(Long idItem);
 
 }

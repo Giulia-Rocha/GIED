@@ -19,6 +19,7 @@ public class Item {
         this.descricao = descricao;
         this.nivelMinEstoque = nivelMinEstoque;
     }
+    public Item(){}
 
     public void verificarEstoque(){
 

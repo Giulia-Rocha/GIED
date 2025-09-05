@@ -7,7 +7,6 @@ import com.dasa.gied.domain.model.LoteEstoque;
 import com.dasa.gied.service.dto.ConsultaEstoqueDTO;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ItemService {
