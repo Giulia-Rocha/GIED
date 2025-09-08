@@ -7,11 +7,10 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.Optional;
 
 public class UsuarioService {
-    private Usuario usuario;
-    private UsuarioDao usuarioDao;
+    private  final UsuarioDao usuarioDao;
 
-    public UsuarioService(Usuario usuario){
-        this.usuario = usuario;
+    public UsuarioService(UsuarioDao usuarioDao){
+        this.usuarioDao = usuarioDao;
     }
 
     public Usuario autenticar(String login, String senha){
