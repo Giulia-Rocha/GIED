@@ -12,4 +12,8 @@ public class TelaMenu {
     private JPanel PainelOp;
     private JPanel PainelSair;
     private JLabel tituloMenu;
+
+
+
 }
+

@@ -3,7 +3,7 @@
   <grid id="27dc6" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="25" width="739" height="425"/>
+      <xy x="20" y="25" width="822" height="425"/>
     </constraints>
     <properties>
       <background color="-132865"/>
@@ -11,11 +11,11 @@
     </properties>
     <border type="none"/>
     <children>
-      <grid id="e819a" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
+      <grid id="e819a" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="20" vgap="20">
+        <margin top="10" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="500" height="500"/>
+            <preferred-size width="600" height="500"/>
           </grid>
         </constraints>
         <properties>
@@ -23,40 +23,55 @@
         </properties>
         <border type="none"/>
         <children>
-          <grid id="73e05" binding="PainelSair" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="73e05" binding="PainelSair" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="5" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="1" use-parent-layout="false">
-                <maximum-size width="200" height="200"/>
+              <grid row="0" column="0" row-span="4" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="2" use-parent-layout="false">
+                <preferred-size width="100" height="200"/>
               </grid>
             </constraints>
             <properties>
-              <background color="-8750470"/>
+              <background color="-132865"/>
             </properties>
             <border type="bevel-lowered"/>
             <children>
-              <component id="8c624" class="javax.swing.JButton" binding="alterarMinhaSenhaButton" default-binding="true">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Alterar minha senha"/>
-                </properties>
-              </component>
               <component id="d4302" class="javax.swing.JButton" binding="sairButton" default-binding="true">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="1" use-parent-layout="false">
+                    <preferred-size width="100" height="-1"/>
+                  </grid>
                 </constraints>
                 <properties>
+                  <background color="-6815737"/>
+                  <font name="Arial" size="12"/>
+                  <foreground color="-132865"/>
                   <text value="Sair"/>
+                </properties>
+              </component>
+              <component id="8c624" class="javax.swing.JButton" binding="alterarMinhaSenhaButton" default-binding="true">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="30"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-16757373"/>
+                  <borderPainted value="true"/>
+                  <contentAreaFilled value="true"/>
+                  <defaultCapable value="true"/>
+                  <focusCycleRoot value="false"/>
+                  <foreground color="-132865"/>
+                  <hideActionText value="false"/>
+                  <margin top="0" left="0" bottom="0" right="0"/>
+                  <text value="Alterar minha senha"/>
                 </properties>
               </component>
             </children>
           </grid>
-          <grid id="7380e" binding="PainelOp" layout-manager="GridLayoutManager" row-count="5" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="7380e" binding="PainelOp" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <autoscrolls value="false"/>
@@ -67,40 +82,48 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="58846" class="javax.swing.JButton" binding="relatoriosButton">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Relatórios"/>
-                </properties>
-              </component>
-              <component id="6e231" class="javax.swing.JButton" binding="movimentacoesButton">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Movimentações"/>
-                </properties>
-              </component>
-              <component id="172f6" class="javax.swing.JButton" binding="consultarEstoqueButton" default-binding="true">
-                <constraints>
-                  <grid row="1" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Consultar Estoque"/>
-                </properties>
-              </component>
               <component id="4c303" class="javax.swing.JButton" binding="gerenciarUsuariosButton">
                 <constraints>
-                  <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <background color="-132865"/>
+                  <foreground color="-16777216"/>
                   <text value="Gerenciar Usuários"/>
                 </properties>
               </component>
             </children>
           </grid>
+          <component id="6e231" class="javax.swing.JButton" binding="movimentacoesButton">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-132865"/>
+              <foreground color="-16777216"/>
+              <text value="Movimentações"/>
+            </properties>
+          </component>
+          <component id="172f6" class="javax.swing.JButton" binding="consultarEstoqueButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-132865"/>
+              <foreground color="-16777216"/>
+              <text value="Consultar Estoque"/>
+            </properties>
+          </component>
+          <component id="58846" class="javax.swing.JButton" binding="relatoriosButton">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-132865"/>
+              <foreground color="-16777216"/>
+              <text value="Relatórios"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <component id="aa44a" class="javax.swing.JLabel" binding="tituloMenu">

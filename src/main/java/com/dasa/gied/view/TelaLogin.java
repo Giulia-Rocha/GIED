@@ -51,8 +51,8 @@ public class TelaLogin {
             Usuario usuarioAutenticado = usuarioService.autenticar(login,senha);
 
             JOptionPane.showMessageDialog(GIED, "Usuario autenticado com sucesso!");
-//            new TelaMenu().setVisible(true);
-//            SwingUtilities.getWindowAncestor(GIED).dispose();
+            new TelaMenu().setVisible(true);
+            SwingUtilities.getWindowAncestor(GIED).dispose();
         }catch(SecurityException e){
             JOptionPane.showMessageDialog(GIED, e.getMessage(), "Erro de Autenticação", JOptionPane.ERROR_MESSAGE);
         }finally {
