@@ -20,6 +20,9 @@ public class TelaLogin {
 
     private final UsuarioService usuarioService;
 
+    private TelaMenu telaMenu ;
+
+
     public TelaLogin(){
         UsuarioDao usuarioDao = new Application.UsuarioDaoFake();
         this.usuarioService = new UsuarioService(usuarioDao);
@@ -51,8 +54,10 @@ public class TelaLogin {
             Usuario usuarioAutenticado = usuarioService.autenticar(login,senha);
 
             JOptionPane.showMessageDialog(GIED, "Usuario autenticado com sucesso!");
-            new TelaMenu().setVisible(true);
             SwingUtilities.getWindowAncestor(GIED).dispose();
+
+            telaMenu = new TelaMenu(usuarioAutenticado.getTipo());
+            telaMenu.setVisible(true);
         }catch(SecurityException e){
             JOptionPane.showMessageDialog(GIED, e.getMessage(), "Erro de Autenticação", JOptionPane.ERROR_MESSAGE);
         }finally {
@@ -60,4 +65,5 @@ public class TelaLogin {
         }
 
     }
+
 }
