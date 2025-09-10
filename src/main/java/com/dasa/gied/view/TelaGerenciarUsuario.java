@@ -7,4 +7,5 @@ public class TelaGerenciarUsuario {
     private JButton registrarUsuárioButton;
     private JButton deletarUsuárioButton;
     private JButton buscarPorIDButton;
+    private JButton voltarButton;
 }
