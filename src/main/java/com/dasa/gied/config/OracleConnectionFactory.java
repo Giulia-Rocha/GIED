@@ -1,19 +1,39 @@
 package com.dasa.gied.config;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
 public class OracleConnectionFactory {
-    public static Connection getConnection() throws SQLException {
-        String url = System.getenv().getOrDefault("ORACLE_URL", "jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl");
-        String user = System.getenv().getOrDefault("ORACLE_USER", "rm");
-        String pass = System.getenv().getOrDefault("ORACLE_PASSWORD", "senha_data_aniversario");
 
+    private static final Properties PROPS = loadProperties();
+
+
+    private OracleConnectionFactory() {}
+
+    private static Properties loadProperties() {
         Properties props = new Properties();
-        props.setProperty("user", user);
-        props.setProperty("password", pass);
-        return DriverManager.getConnection(url, props);
+        try (InputStream input = OracleConnectionFactory.class
+                .getClassLoader()
+                .getResourceAsStream("application.properties")) {
+
+            if (input == null) {
+                throw new IllegalStateException("Arquivo application.properties não encontrado!");
+            }
+            props.load(input);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao carregar propriedades do banco", e);
+        }
+        return props;
+    }
+
+    public static Connection getConnection() throws SQLException {
+        String url = PROPS.getProperty("db.url");
+        String user = PROPS.getProperty("db.user");
+        String pass = PROPS.getProperty("db.password");
+
+        return DriverManager.getConnection(url, user, pass);
     }
 }
