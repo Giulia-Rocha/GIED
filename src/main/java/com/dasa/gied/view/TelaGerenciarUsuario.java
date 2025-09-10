@@ -17,12 +17,12 @@ public class TelaGerenciarUsuario extends JFrame {
 
     private final UsuarioService usuarioService;
 
-    public TelaGerenciarUsuario(TipoUsuario tipoUsuario) {
+    public TelaGerenciarUsuario(Usuario usuarioLogado) {
         UsuarioDao usuarioDao = new JdbcUsuarioDao();
         this.usuarioService = new UsuarioService(usuarioDao);
 
         voltarButton.addActionListener(e -> {
-            new TelaMenu(tipoUsuario);
+            new TelaMenu(usuarioLogado);
             SwingUtilities.getWindowAncestor(panel1).dispose();
         });
         // Ação do Botão "Registrar Usuário"

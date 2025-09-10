@@ -1,6 +1,10 @@
 package com.dasa.gied.view;
 
+import com.dasa.gied.dao.UsuarioDao;
+import com.dasa.gied.dao.jdbc.JdbcUsuarioDao;
 import com.dasa.gied.domain.enums.TipoUsuario;
+import com.dasa.gied.domain.model.Usuario;
+import com.dasa.gied.service.UsuarioService;
 
 import javax.swing.*;
 
@@ -17,10 +21,11 @@ public class TelaMenu extends JFrame {
     private JLabel tituloMenu;
     private JPanel painelPrincipal;
 
-    private final TipoUsuario tipoUsuario;
+    private final Usuario usuario;
 
-    public TelaMenu(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    public TelaMenu(Usuario usuarioAutenticado) {
+        this.usuario = usuarioAutenticado;
+
         setTitle("Menu Principal - GIED");
         setContentPane(painelPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -28,7 +33,7 @@ public class TelaMenu extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        if(tipoUsuario != TipoUsuario.ADMIN){
+        if(usuario.getTipo() != TipoUsuario.ADMIN){
             gerenciarUsuariosButton.setVisible(false);
         }
 
@@ -40,7 +45,7 @@ public class TelaMenu extends JFrame {
         gerenciarUsuariosButton.addActionListener(e -> {
             // Cria a nova tela
             JFrame frameGerenciarUsuario = new JFrame("Gerenciar Usuários");
-            frameGerenciarUsuario.setContentPane(new TelaGerenciarUsuario(this.tipoUsuario).getPanel()); // Passa o tipo de usuário
+            frameGerenciarUsuario.setContentPane(new TelaGerenciarUsuario(this.usuario).getPanel()); // Passa o tipo de usuário
             frameGerenciarUsuario.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frameGerenciarUsuario.pack();
             frameGerenciarUsuario.setLocationRelativeTo(null);
@@ -52,7 +57,7 @@ public class TelaMenu extends JFrame {
         // Ação do botão Movimentações
         movimentacoesButton.addActionListener(e -> {
             JFrame frameMovimentacoes = new JFrame("Movimentações de Estoque");
-            frameMovimentacoes.setContentPane(new TelaMovimentacoes(this.tipoUsuario).getPanel());
+            frameMovimentacoes.setContentPane(new TelaMovimentacoes(this.usuario).getPanel());
             frameMovimentacoes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frameMovimentacoes.pack();
             frameMovimentacoes.setLocationRelativeTo(null);
@@ -63,13 +68,57 @@ public class TelaMenu extends JFrame {
         // Ação do botão Consultar Estoque
         consultarEstoqueButton.addActionListener(e -> {
             JFrame frameEstoque = new JFrame("Consultar Estoque");
-            frameEstoque.setContentPane(new TelaEstoque(this.tipoUsuario).getPanel());
+            frameEstoque.setContentPane(new TelaEstoque(this.usuario).getPanel());
             frameEstoque.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frameEstoque.pack();
             frameEstoque.setLocationRelativeTo(null);
             frameEstoque.setVisible(true);
 
             this.dispose();
+        });
+        alterarMinhaSenhaButton.addActionListener(e -> {
+            // Cria um painel com os campos de senha
+            JPanel alterarSenhaPanel = new JPanel();
+            alterarSenhaPanel.setLayout(new BoxLayout(alterarSenhaPanel, BoxLayout.Y_AXIS));
+
+            JPasswordField senhaAtualField = new JPasswordField(20);
+            JPasswordField novaSenhaField = new JPasswordField(20);
+            JPasswordField confirmarNovaSenhaField = new JPasswordField(20);
+
+            alterarSenhaPanel.add(new JLabel("Senha Atual:"));
+            alterarSenhaPanel.add(senhaAtualField);
+            alterarSenhaPanel.add(Box.createVerticalStrut(10));
+            alterarSenhaPanel.add(new JLabel("Nova Senha:"));
+            alterarSenhaPanel.add(novaSenhaField);
+            alterarSenhaPanel.add(Box.createVerticalStrut(10));
+            alterarSenhaPanel.add(new JLabel("Confirme a Nova Senha:"));
+            alterarSenhaPanel.add(confirmarNovaSenhaField);
+
+            int result = JOptionPane.showConfirmDialog(this, alterarSenhaPanel, "Alterar Senha", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                try {
+                    String senhaAtual = new String(senhaAtualField.getPassword());
+                    String novaSenha = new String(novaSenhaField.getPassword());
+                    String confirmarNovaSenha = new String(confirmarNovaSenhaField.getPassword());
+
+                    // Validação dos campos
+                    if (!novaSenha.equals(confirmarNovaSenha)) {
+                        throw new IllegalArgumentException("A nova senha e a confirmação não correspondem.");
+                    }
+
+                    // Chama o serviço para alterar a senha
+                    // Usa o ID do usuário que está logado
+                    UsuarioDao dao = new JdbcUsuarioDao(); // Instancia o DAO e o Service aqui
+                    UsuarioService service = new UsuarioService(dao);
+                    service.alterarSenha(this.usuario.getId(), senhaAtual, novaSenha);
+
+                    JOptionPane.showMessageDialog(this, "Senha alterada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                } catch (IllegalArgumentException | SecurityException | IllegalStateException  ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro ao Alterar Senha", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
     }

@@ -5,6 +5,7 @@ import com.dasa.gied.dao.LoteEstoqueDao;
 import com.dasa.gied.dao.jdbc.JdbcItemDao;
 import com.dasa.gied.dao.jdbc.JdbcLoteEstoqueDao;
 import com.dasa.gied.domain.enums.TipoUsuario;
+import com.dasa.gied.domain.model.Usuario;
 import com.dasa.gied.service.ItemService;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class TelaMovimentacoes  {
 
     private ItemService itemService;
 
-    public TelaMovimentacoes(TipoUsuario tipoUsuario) {
+    public TelaMovimentacoes(Usuario usuario) {
         // Instancia os DAOs e o Service
         ItemDao itemDao = new JdbcItemDao();
         LoteEstoqueDao loteEstoqueDao = new JdbcLoteEstoqueDao();
@@ -28,7 +29,7 @@ public class TelaMovimentacoes  {
 
         //Ação de voltar
         voltarButton.addActionListener(e -> {
-            new TelaMenu(tipoUsuario);
+            new TelaMenu(usuario);
             SwingUtilities.getWindowAncestor(panel1).dispose();
         });
 

@@ -7,21 +7,21 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.Optional;
 
 public class UsuarioService {
-    private  final UsuarioDao usuarioDao;
+    private final UsuarioDao usuarioDao;
 
-    public UsuarioService(UsuarioDao usuarioDao){
+    public UsuarioService(UsuarioDao usuarioDao) {
         this.usuarioDao = usuarioDao;
     }
 
-    public Usuario autenticar(String login, String senha){
+    public Usuario autenticar(String login, String senha) {
         Optional<Usuario> user = usuarioDao.findByLogin(login);
-        if(user.isPresent() && BCrypt.checkpw(senha,user.get().getSenhaHash())){
+        if (user.isPresent() && BCrypt.checkpw(senha, user.get().getSenhaHash())) {
             return user.get();
-        }
-        else{
+        } else {
             throw new SecurityException("Login ou Senha Inválidos");
         }
     }
+
     public void criarUsuario(Usuario novoUsuario, String senha) {
         if (novoUsuario.getLogin() == null || novoUsuario.getLogin().trim().isEmpty()) {
             throw new IllegalArgumentException("O login do usuário é obrigatório.");
@@ -49,5 +49,30 @@ public class UsuarioService {
         // Primeiro, verifica se o usuário existe
         buscarPorId(id);
         usuarioDao.delete(id);
+    }
+
+    public void alterarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
+        // Busca o usuário no banco
+        Usuario usuario = usuarioDao.findById(usuarioId);
+        if (usuario == null) {
+            throw new IllegalStateException("Usuário não encontrado. A sessão pode ter expirado.");
+        }
+
+        // Verifica se a senha atual fornecida corresponde à senha armazenada no banco
+        if (!BCrypt.checkpw(senhaAtual, usuario.getSenhaHash())) {
+            throw new SecurityException("A senha atual está incorreta.");
+        }
+
+        // Valida se a nova senha não está em branco
+        if (novaSenha == null || novaSenha.trim().isEmpty()) {
+            throw new IllegalArgumentException("A nova senha não pode estar em branco.");
+        }
+
+        // Gera o hash da nova senha
+        String novaSenhaHash = BCrypt.hashpw(novaSenha, BCrypt.gensalt());
+        usuario.setSenhaHash(novaSenhaHash);
+
+        // Salva o usuário com a nova senha no banco
+        usuarioDao.atualizar(usuario);
     }
 }
