@@ -110,6 +110,21 @@ public class JdbcUsuarioDao implements UsuarioDao {
         return null; // Retorna null se não encontrar
     }
 
+    public void delete(Long id) {
+        String sql = "DELETE FROM usuario WHERE id = ?";
+        try (Connection con = OracleConnectionFactory.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setLong(1, id);
+            int affectedRows = st.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Deletar usuário falhou, nenhum registro afetado.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar usuário.", e);
+        }
+    }
+
     private Usuario mapRowToUsuario(ResultSet rs) throws SQLException {
         Usuario usuario = new Usuario();
         usuario.setId(rs.getLong("id"));

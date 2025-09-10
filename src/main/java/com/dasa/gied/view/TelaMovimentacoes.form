@@ -31,7 +31,7 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="62a8e" class="javax.swing.JButton" binding="registrarSaídaButton" default-binding="true">
+              <component id="62a8e" class="javax.swing.JButton" binding="registrarSaidaButton">
                 <constraints/>
                 <properties>
                   <background color="-1"/>

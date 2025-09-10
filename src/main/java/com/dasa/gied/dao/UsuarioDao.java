@@ -11,5 +11,6 @@ public interface UsuarioDao {
      void atualizar(Usuario usuario);
      List<Usuario> findAll();
      Usuario findById(Long id);
+     void delete(Long id);
 
 }

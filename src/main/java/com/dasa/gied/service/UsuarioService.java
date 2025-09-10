@@ -22,4 +22,32 @@ public class UsuarioService {
             throw new SecurityException("Login ou Senha Inválidos");
         }
     }
+    public void criarUsuario(Usuario novoUsuario, String senha) {
+        if (novoUsuario.getLogin() == null || novoUsuario.getLogin().trim().isEmpty()) {
+            throw new IllegalArgumentException("O login do usuário é obrigatório.");
+        }
+        if (usuarioDao.findByLogin(novoUsuario.getLogin()).isPresent()) {
+            throw new IllegalStateException("Já existe um usuário com este login.");
+        }
+
+        // Gera o hash da senha e o define no objeto
+        String senhaHasheada = BCrypt.hashpw(senha, BCrypt.gensalt());
+        novoUsuario.setSenhaHash(senhaHasheada);
+
+        usuarioDao.criar(novoUsuario);
+    }
+
+    public Usuario buscarPorId(Long id) {
+        Usuario usuario = usuarioDao.findById(id);
+        if (usuario == null) {
+            throw new IllegalStateException("Usuário com ID " + id + " não encontrado.");
+        }
+        return usuario;
+    }
+
+    public void deletarUsuario(Long id) {
+        // Primeiro, verifica se o usuário existe
+        buscarPorId(id);
+        usuarioDao.delete(id);
+    }
 }
