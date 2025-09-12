@@ -5,10 +5,7 @@ import com.dasa.gied.dao.UsuarioDao;
 import com.dasa.gied.domain.enums.TipoUsuario;
 import com.dasa.gied.domain.model.Usuario;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,22 +33,52 @@ public class JdbcUsuarioDao implements UsuarioDao {
     }
 
     @Override
-    public void criar(Usuario usuario) {
-        String sql = "INSERT INTO USUARIO (NM_USUARIO,DS_LOGIN, DS_SENHA_HASH, TP_USUAIO) VALUES (?, ?, ?, ?)";
+    public Usuario criar(Usuario usuario) {
+        String sqlId = "SELECT SEQ_USUARIO.NEXTVAL FROM DUAL";
+        String sqlInsert = "INSERT INTO USUARIO (ID_USUARIO, NM_USUARIO, DS_LOGIN, DS_SENHA_HASH, TP_USUARIO) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
         try (Connection con = OracleConnectionFactory.getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+             PreparedStatement stId = con.prepareStatement(sqlId);
+             ResultSet rsId = stId.executeQuery()) {
 
-            st.setString(1, usuario.getNome());
-            st.setString(2, usuario.getLogin());
-            st.setString(3, usuario.getSenhaHash());
-            st.setString(4, usuario.getTipo().name()); // Salva o nome do Enum (ex: "ADMIN")
+            if (!rsId.next()) {
+                throw new SQLException("Não foi possível gerar ID para o usuário.");
+            }
+            long idGerado = rsId.getLong(1);
+            usuario.setId(idGerado);
 
-            st.executeUpdate();
+            try (PreparedStatement stInsert = con.prepareStatement(sqlInsert)) {
+                stInsert.setLong(1, idGerado);
+                stInsert.setString(2, usuario.getNome());
+                stInsert.setString(3, usuario.getLogin());
+                stInsert.setString(4, usuario.getSenhaHash());
+                stInsert.setString(5, usuario.getTipo().name());
+
+                int affected = stInsert.executeUpdate();
+                if (affected == 0) {
+                    throw new SQLException("Falha ao inserir usuário.");
+                }
+            }
+
+            // Retorna o usuário completo usando mapRowToUsuario
+            String sqlSelect = "SELECT * FROM USUARIO WHERE ID_USUARIO = ?";
+            try (PreparedStatement stSelect = con.prepareStatement(sqlSelect)) {
+                stSelect.setLong(1, idGerado);
+                try (ResultSet rs = stSelect.executeQuery()) {
+                    if (rs.next()) {
+                        return mapRowToUsuario(rs);
+                    } else {
+                        throw new SQLException("Falha ao buscar usuário criado.");
+                    }
+                }
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar novo usuário.", e);
         }
     }
+
 
     @Override
     public void atualizar(Usuario usuario) {

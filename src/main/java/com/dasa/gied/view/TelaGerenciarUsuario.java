@@ -57,8 +57,10 @@ public class TelaGerenciarUsuario extends JFrame {
                         throw new IllegalArgumentException("Todos os campos são obrigatórios.");
                     }
 
-                    usuarioService.criarUsuario(novoUsuario, senha);
-                    JOptionPane.showMessageDialog(panel1, "Usuário registrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    Usuario usuarioCriado = usuarioService.criarUsuario(novoUsuario, senha);
+
+                    String infoUsuario = String.format("Usuario criado com sucesso! \n\nID: %d\nNome: %s\nLogin: %s\nTipo: %s ", usuarioCriado.getId(), usuarioCriado.getNome(), usuarioCriado.getLogin(), usuarioCriado.getTipo().name());
+                    JOptionPane.showMessageDialog(panel1, infoUsuario, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
                 } catch (IllegalArgumentException | IllegalStateException ex) {
                     JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Erro ao Registrar", JOptionPane.ERROR_MESSAGE);

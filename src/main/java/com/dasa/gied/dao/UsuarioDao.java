@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UsuarioDao {
      Optional<Usuario> findByLogin(String login);
-     void criar(Usuario usuario);
+     Usuario criar(Usuario usuario);
      void atualizar(Usuario usuario);
      List<Usuario> findAll();
      Usuario findById(Long id);

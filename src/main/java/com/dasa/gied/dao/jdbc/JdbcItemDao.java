@@ -107,6 +107,7 @@ public class JdbcItemDao implements ItemDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao listar todos os itens.", e);
+
         }
         return todosOsItens;
     }
@@ -140,7 +141,14 @@ public class JdbcItemDao implements ItemDao {
         item.setNome(rs.getString("NM_ITEM"));
         item.setDescricao(rs.getString("DS_ITEM"));
         item.setNivelMinEstoque(rs.getInt("NR_NIVEL_MIN_ESTOQUE"));
-        item.setQuantidadeNoEstoque(rs.getInt("TOTAL_QUANTIDADE"));
+
+        // Lê a quantidade apenas se a coluna existir
+        try {
+            item.setQuantidadeNoEstoque(rs.getInt("TOTAL_QUANTIDADE"));
+        } catch (SQLException e) {
+            // coluna não existe na query, ignora
+        }
+
         return item;
     }
 }

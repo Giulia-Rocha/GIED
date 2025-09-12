@@ -22,7 +22,7 @@ public class UsuarioService {
         }
     }
 
-    public void criarUsuario(Usuario novoUsuario, String senha) {
+    public Usuario criarUsuario(Usuario novoUsuario, String senha) {
         if (novoUsuario.getLogin() == null || novoUsuario.getLogin().trim().isEmpty()) {
             throw new IllegalArgumentException("O login do usuário é obrigatório.");
         }
@@ -34,7 +34,8 @@ public class UsuarioService {
         String senhaHasheada = BCrypt.hashpw(senha, BCrypt.gensalt());
         novoUsuario.setSenhaHash(senhaHasheada);
 
-        usuarioDao.criar(novoUsuario);
+        Usuario usuarioCriado = usuarioDao.criar(novoUsuario);
+        return usuarioCriado;
     }
 
     public Usuario buscarPorId(Long id) {

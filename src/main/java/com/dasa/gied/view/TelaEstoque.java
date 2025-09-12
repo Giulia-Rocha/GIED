@@ -59,6 +59,7 @@ public class TelaEstoque extends JFrame {
 
             } catch (RuntimeException ex) {
                 JOptionPane.showMessageDialog(panel1, "Erro ao buscar estoque: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             }
         });
 
