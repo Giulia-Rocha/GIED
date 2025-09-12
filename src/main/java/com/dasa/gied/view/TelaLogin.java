@@ -27,12 +27,7 @@ public class TelaLogin {
         UsuarioDao usuarioDao = new JdbcUsuarioDao();
         this.usuarioService = new UsuarioService(usuarioDao);
 
-        entrarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                realizarLogin();
-            }
-        });
+        entrarButton.addActionListener(e -> realizarLogin());
     }
 
 
