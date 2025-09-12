@@ -2,8 +2,10 @@ package com.dasa.gied.dao.jdbc;
 
 import com.dasa.gied.config.OracleConnectionFactory;
 import com.dasa.gied.dao.LoteEstoqueDao;
+import com.dasa.gied.domain.enums.TipoUsuario;
 import com.dasa.gied.domain.model.Item;
 import com.dasa.gied.domain.model.LoteEstoque;
+import com.dasa.gied.domain.model.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +19,7 @@ public class JdbcLoteEstoqueDao implements LoteEstoqueDao {
 
     @Override
     public Optional<LoteEstoque> findByItemAndId(Long idItem, String numeroLote) {
-        String sql = "SELECT * FROM lote WHERE id_item = ? AND numero_lote = ?";
+        String sql = "SELECT * FROM LOTE WHERE ID_ITEM = ? AND NR_LOTE = ?";
 
         try(Connection con = OracleConnectionFactory.getConnection();
             PreparedStatement st = con.prepareStatement(sql)){
@@ -27,17 +29,7 @@ public class JdbcLoteEstoqueDao implements LoteEstoqueDao {
 
             try(ResultSet rs = st.executeQuery()){
                 if(rs.next()){
-                    Item itemProxy = new Item();
-                    itemProxy.setId(idItem);
-
-                    LoteEstoque loteEstoque = new LoteEstoque();
-                    loteEstoque.setId(rs.getLong("id"));
-                    loteEstoque.setQuantidade(rs.getInt("quantidade"));
-                    loteEstoque.setLote(rs.getString("numero_lote"));
-                    loteEstoque.setDataValidade(rs.getDate("data_validade").toLocalDate());
-                    loteEstoque.setItem(itemProxy);
-
-                    return Optional.of(loteEstoque);
+                    return Optional.of(mapRowToLoteEstoque(rs));
                 }
             }
         }catch (SQLException e){
@@ -48,7 +40,7 @@ public class JdbcLoteEstoqueDao implements LoteEstoqueDao {
 
     @Override
     public void salvar(LoteEstoque loteEstoque) {
-        String sql = "INSERT INTO lote (id_item, numero_lote, data_validade, quantidade) VALUES ( ?, ?, ? , ?)";
+        String sql = "INSERT INTO LOTE (ID_ITEM, NR_LOTE, DT_VALIDADE, NR_QUANTIDADE) VALUES ( ?, ?, ? , ?)";
         try(Connection con = OracleConnectionFactory.getConnection();
             PreparedStatement st = con.prepareStatement(sql)){
             st.setLong(1, loteEstoque.getItem().getId());
@@ -65,7 +57,7 @@ public class JdbcLoteEstoqueDao implements LoteEstoqueDao {
 
     @Override
     public int atualizar(LoteEstoque loteEstoque) {
-        String sql = "UPDATE lote SET quantidade = ? WHERE id= ?";
+        String sql = "UPDATE LOTE SET NR_QUANTIDADE = ? WHERE ID_LOTE= ?";
         try(Connection con = OracleConnectionFactory.getConnection();
             PreparedStatement st = con.prepareStatement(sql)){
             st.setInt(1, loteEstoque.getQuantidade());
@@ -80,7 +72,7 @@ public class JdbcLoteEstoqueDao implements LoteEstoqueDao {
 
     @Override
     public List<LoteEstoque> findByItemOrderByValidadeAsc(Long idItem) {
-        String sql = "SELECT * FROM lote WHERE id_item = ? ORDER BY data_validade ASC";
+        String sql = "SELECT * FROM LOTE WHERE ID_ITEM = ? ORDER BY DT_VALIDADE ASC";
         List<LoteEstoque> lotesOrdenados = new ArrayList<>();
         try(Connection con = OracleConnectionFactory.getConnection();
             PreparedStatement st = con.prepareStatement(sql)){
@@ -88,24 +80,8 @@ public class JdbcLoteEstoqueDao implements LoteEstoqueDao {
             ResultSet rs = st.executeQuery();
 
             while(rs.next()){
-                Item itemProxy = new Item();
-                itemProxy.setId(idItem);
-
-                // Agora, cria o objeto LoteEstoque completo.
-                LoteEstoque loteEstoque = new LoteEstoque();
-                loteEstoque.setId(rs.getLong("id"));
-                loteEstoque.setQuantidade(rs.getInt("quantidade"));
-                loteEstoque.setLote(rs.getString("numero_lote")); // Ajuste o nome da coluna se necessário
-
-                // Converte a data do banco (java.sql.Date) para LocalDate.
-                loteEstoque.setDataValidade(rs.getDate("data_validade").toLocalDate());
-
-                // Associa o Item proxy ao Lote. Agora o link está feito!
-                loteEstoque.setItem(itemProxy);
-
                 // Adiciona o lote totalmente montado à lista de retorno.
-                lotesOrdenados.add(loteEstoque);
-
+                lotesOrdenados.add(mapRowToLoteEstoque(rs));
             }
 
 
@@ -113,5 +89,14 @@ public class JdbcLoteEstoqueDao implements LoteEstoqueDao {
             throw new RuntimeException("Erro ao buscar lotes "+e.getMessage());
         }
         return lotesOrdenados;
+    }
+
+    private LoteEstoque mapRowToLoteEstoque(ResultSet rs) throws SQLException {
+        LoteEstoque loteEstoque = new LoteEstoque();
+        loteEstoque.setId(rs.getLong("ID_LOTE"));
+        loteEstoque.setQuantidade(rs.getInt("NR_QUANTIDADE"));
+        loteEstoque.setLote(rs.getString("NR_LOTE"));
+        loteEstoque.setDataValidade(rs.getDate("DT_VALIDADE").toLocalDate());
+        return loteEstoque;
     }
 }
