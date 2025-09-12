@@ -16,7 +16,7 @@ import java.util.Optional;
 public class JdbcUsuarioDao implements UsuarioDao {
     @Override
     public Optional<Usuario> findByLogin(String login) {
-        String sql = "SELECT * FROM T_GIED_USUARIO WHERE login = ?";
+        String sql = "SELECT * FROM USUARIO WHERE DS_LOGIN = ?";
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
@@ -37,7 +37,7 @@ public class JdbcUsuarioDao implements UsuarioDao {
 
     @Override
     public void criar(Usuario usuario) {
-        String sql = "INSERT INTO usuario (nome, login, senha_hash, tipo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO USUARIO (NM_USUARIO,DS_LOGIN, DS_SENHA_HASH, TP_USUAIO) VALUES (?, ?, ?, ?)";
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
@@ -55,7 +55,7 @@ public class JdbcUsuarioDao implements UsuarioDao {
 
     @Override
     public void atualizar(Usuario usuario) {
-        String sql = "UPDATE usuario SET nome = ?, login = ?, senha_hash = ?, tipo = ? WHERE id = ?";
+        String sql = "UPDATE USUARIO SET NM_USUARIO = ?, DS_LOGIN = ?, DS_SENHA_HASH = ?, TP_USUARIO = ? WHERE ID_USUARIO = ?";
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
@@ -75,7 +75,7 @@ public class JdbcUsuarioDao implements UsuarioDao {
 
     @Override
     public List<Usuario> findAll() {
-        String sql = "SELECT * FROM usuario";
+        String sql = "SELECT * FROM USUARIO";
         List<Usuario> todosOsUsuarios = new ArrayList<>();
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql);
@@ -93,7 +93,7 @@ public class JdbcUsuarioDao implements UsuarioDao {
 
     @Override
     public Usuario findById(Long id) {
-        String sql = "SELECT * FROM usuario WHERE id = ?";
+        String sql = "SELECT * FROM USUARIO WHERE ID_USUARIO = ?";
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
@@ -111,7 +111,7 @@ public class JdbcUsuarioDao implements UsuarioDao {
     }
 
     public void delete(Long id) {
-        String sql = "DELETE FROM usuario WHERE id = ?";
+        String sql = "DELETE FROM USUARIO WHERE ID_USUARIO = ?";
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
@@ -127,12 +127,12 @@ public class JdbcUsuarioDao implements UsuarioDao {
 
     private Usuario mapRowToUsuario(ResultSet rs) throws SQLException {
         Usuario usuario = new Usuario();
-        usuario.setId(rs.getLong("id"));
-        usuario.setNome(rs.getString("nome"));
-        usuario.setLogin(rs.getString("login"));
-        usuario.setSenhaHash(rs.getString("senha_hash"));
+        usuario.setId(rs.getLong("ID_USUARIO"));
+        usuario.setNome(rs.getString("NM_USUARIO"));
+        usuario.setLogin(rs.getString("DS_LOGIN"));
+        usuario.setSenhaHash(rs.getString("DS_SENHA_HASH"));
         // Converte a String do banco de volta para o Enum
-        usuario.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
+        usuario.setTipo(TipoUsuario.valueOf(rs.getString("TP_USUARIO")));
         return usuario;
     }
 }
