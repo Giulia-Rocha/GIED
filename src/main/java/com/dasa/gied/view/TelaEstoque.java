@@ -76,12 +76,14 @@ public class TelaEstoque extends JFrame {
                     sb.append("ID: ").append(item.getId())
                             .append(", Nome: ").append(item.getNome())
                             .append(", Nível Mínimo: ").append(item.getNivelMinEstoque())
+                            .append(", Quantidade no estoque: ").append(item.getQuantidadeNoEstoque())
                             .append("\n");
                 }
                 JOptionPane.showMessageDialog(panel1, sb.toString(), "Itens com Estoque Baixo", JOptionPane.WARNING_MESSAGE);
 
             } catch (RuntimeException ex) {
                 JOptionPane.showMessageDialog(panel1, "Erro ao buscar estoque baixo: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             }
         });
 

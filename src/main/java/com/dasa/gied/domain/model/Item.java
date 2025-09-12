@@ -12,19 +12,35 @@ public class Item {
     private String nome;
     private String descricao;
     private Integer nivelMinEstoque;
+    private Integer quantidadeNoEstoque;
 
+    public Item(Long id, String nome, String descricao, Integer nivelMinEstoque, Integer quantidadeNoEstoque) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.nivelMinEstoque = nivelMinEstoque;
+        this.quantidadeNoEstoque = quantidadeNoEstoque;
+    }
     public Item(Long id, String nome, String descricao, Integer nivelMinEstoque) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.nivelMinEstoque = nivelMinEstoque;
     }
+
     public Item(){}
 
     public void verificarEstoque(){
 
     }
 
+    public Integer getQuantidadeNoEstoque() {
+        return quantidadeNoEstoque;
+    }
+
+    public void setQuantidadeNoEstoque(Integer quantidadeNoEstoque) {
+        this.quantidadeNoEstoque = quantidadeNoEstoque;
+    }
 
     public Long getId() {
         return id;

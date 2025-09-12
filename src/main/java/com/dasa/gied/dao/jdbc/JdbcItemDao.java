@@ -114,16 +114,11 @@ public class JdbcItemDao implements ItemDao {
     @Override
     public List<Item> findByEstoqueBaixo() {
         String sql = """
-            SELECT l.ID_LOTE, l.NR_LOTE, l.DT_VALIDADE, l.NR_QUANTIDADE, l.ID_ITEM, "
-               
-                   + "i.NM_ITEM, i.DS_ITEM, i.NR_NIVEL_MIN_ESTOQUE
-                "
-                           + "FROM LOTE l
-                "
-                           + "JOIN ITEM i ON l.ID_ITEM = i.
-                ID_ITEM "
-                           + "WHERE l.ID_ITEM = ? "
-                           + "ORDER BY l.DT_VALIDADE ASC
+            SELECT i.ID_ITEM, i.NM_ITEM, i.DS_ITEM, i.NR_NIVEL_MIN_ESTOQUE, SUM(l.NR_QUANTIDADE) AS TOTAL_QUANTIDADE
+                        FROM ITEM i
+                        JOIN LOTE l ON i.ID_ITEM = l.ID_ITEM
+                        GROUP BY i.ID_ITEM, i.NM_ITEM, i.ID_ITEM, i.DS_ITEM, i.NR_NIVEL_MIN_ESTOQUE
+                        HAVING SUM(l.NR_QUANTIDADE) <= i.NR_NIVEL_MIN_ESTOQUE
         """;
         List<Item> itensComEstoqueBaixo = new ArrayList<>();
         try (Connection con = OracleConnectionFactory.getConnection();
@@ -144,7 +139,8 @@ public class JdbcItemDao implements ItemDao {
         item.setId(rs.getLong("ID_ITEM"));
         item.setNome(rs.getString("NM_ITEM"));
         item.setDescricao(rs.getString("DS_ITEM"));
-        item.setNivelMinEstoque(rs.getInt("NR_NR_NIVEL_MIN_ESTOQUE"));
+        item.setNivelMinEstoque(rs.getInt("NR_NIVEL_MIN_ESTOQUE"));
+        item.setQuantidadeNoEstoque(rs.getInt("TOTAL_QUANTIDADE"));
         return item;
     }
 }
