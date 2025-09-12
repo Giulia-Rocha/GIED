@@ -15,7 +15,7 @@ import java.util.List;
 public class JdbcItemDao implements ItemDao {
     @Override
     public Long salvar(Item item) {
-        String sql = "INSERT INTO item (nome, descricao, nivel_min_estoque) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO item (NM_ITEM, DS_ITEM, NR_NIVEL_MIN_ESTOQUE) VALUES (?, ?, ?)";
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql, new String[]{"id"})) {
 
@@ -40,7 +40,7 @@ public class JdbcItemDao implements ItemDao {
 
     @Override
     public void atualizar(Item item) {
-        String sql = "UPDATE item SET nome = ?, descricao = ?, nivel_min_estoque = ? WHERE id = ?";
+        String sql = "UPDATE item SET NM_ITEM = ?, DS_ITEM = ?, NR_NIVEL_MIN_ESTOQUE = ? WHERE ID_ITEM = ?";
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
@@ -58,7 +58,7 @@ public class JdbcItemDao implements ItemDao {
 
     @Override
     public void delete(Long id) {
-        String sql = "DELETE FROM item WHERE id = ?";
+        String sql = "DELETE FROM ITEM WHERE ID_ITEM = ?";
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
@@ -72,7 +72,7 @@ public class JdbcItemDao implements ItemDao {
 
     @Override
     public Item getById(Long id) {
-        String sql = "SELECT * FROM item WHERE id = ?";
+        String sql = "SELECT * FROM ITEM WHERE ID_ITEM = ?";
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
@@ -81,10 +81,10 @@ public class JdbcItemDao implements ItemDao {
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
                     Item item = new Item();
-                    item.setId(rs.getLong("id"));
-                    item.setNome(rs.getString("nome"));
-                    item.setDescricao(rs.getString("descricao"));
-                    item.setNivelMinEstoque(rs.getInt("nivel_min_estoque"));
+                    item.setId(rs.getLong("ID_ITEM"));
+                    item.setNome(rs.getString("NM_ITEM"));
+                    item.setDescricao(rs.getString("DS_ITEM"));
+                    item.setNivelMinEstoque(rs.getInt("NR_NIVEL_MIN_ESTOQUE"));
                     return item;
                 }
             }
@@ -96,7 +96,7 @@ public class JdbcItemDao implements ItemDao {
 
     @Override
     public List<Item> lisarTodos() {
-        String sql = "SELECT * FROM T_GIED_ITEM";
+        String sql = "SELECT * FROM ITEM";
         List<Item> todosOsItens = new ArrayList<>();
         try (Connection con = OracleConnectionFactory.getConnection();
              PreparedStatement st = con.prepareStatement(sql);
@@ -114,11 +114,16 @@ public class JdbcItemDao implements ItemDao {
     @Override
     public List<Item> findByEstoqueBaixo() {
         String sql = """
-            SELECT i.id, i.nome, i.descricao, i.nivel_min_estoque
-            FROM item i
-            JOIN lote l ON i.id = l.id_item
-            GROUP BY i.id, i.nome, i.descricao, i.nivel_min_estoque
-            HAVING SUM(l.quantidade) <= i.nivel_min_estoque
+            SELECT l.ID_LOTE, l.NR_LOTE, l.DT_VALIDADE, l.NR_QUANTIDADE, l.ID_ITEM, "
+               
+                   + "i.NM_ITEM, i.DS_ITEM, i.NR_NIVEL_MIN_ESTOQUE
+                "
+                           + "FROM LOTE l
+                "
+                           + "JOIN ITEM i ON l.ID_ITEM = i.
+                ID_ITEM "
+                           + "WHERE l.ID_ITEM = ? "
+                           + "ORDER BY l.DT_VALIDADE ASC
         """;
         List<Item> itensComEstoqueBaixo = new ArrayList<>();
         try (Connection con = OracleConnectionFactory.getConnection();
@@ -136,10 +141,10 @@ public class JdbcItemDao implements ItemDao {
 
     private Item mapRowToItem(ResultSet rs) throws SQLException {
         Item item = new Item();
-        item.setId(rs.getLong("id"));
-        item.setNome(rs.getString("nome"));
-        item.setDescricao(rs.getString("descricao"));
-        item.setNivelMinEstoque(rs.getInt("nivel_min_estoque"));
+        item.setId(rs.getLong("ID_ITEM"));
+        item.setNome(rs.getString("NM_ITEM"));
+        item.setDescricao(rs.getString("DS_ITEM"));
+        item.setNivelMinEstoque(rs.getInt("NR_NR_NIVEL_MIN_ESTOQUE"));
         return item;
     }
 }
