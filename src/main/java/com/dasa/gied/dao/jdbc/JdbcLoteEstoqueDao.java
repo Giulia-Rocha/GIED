@@ -40,18 +40,29 @@ public class JdbcLoteEstoqueDao implements LoteEstoqueDao {
 
     @Override
     public void salvar(LoteEstoque loteEstoque) {
-        String sql = "INSERT INTO LOTE (ID_ITEM, NR_LOTE, DT_VALIDADE, NR_QUANTIDADE) VALUES ( ?, ?, ? , ?)";
-        try(Connection con = OracleConnectionFactory.getConnection();
-            PreparedStatement st = con.prepareStatement(sql)){
-            st.setLong(1, loteEstoque.getItem().getId());
-            st.setString(2,loteEstoque.getLote());
-            st.setDate(3, java.sql.Date.valueOf(loteEstoque.getDataValidade()));
-            st.setInt(4,loteEstoque.getQuantidade());
-            st.execute();
+        String sqlId = "SELECT SEQ_LOTE.NEXTVAL FROM DUAL";
+        String sql = "INSERT INTO LOTE (ID_LOTE,ID_ITEM, NR_LOTE, DT_VALIDADE, NR_QUANTIDADE) VALUES ( ?,?, ?, ? , ?)";
+        try (Connection con = OracleConnectionFactory.getConnection();
+             PreparedStatement stId = con.prepareStatement(sqlId);
+             ResultSet rsId = stId.executeQuery()) {
 
+            if (!rsId.next()) {
+                throw new SQLException("Não foi possível gerar um ID para o lote.");
+            }
+            long idGerado = rsId.getLong(1);
+            loteEstoque.setId(idGerado); // Define o ID no objeto
 
-        }catch(SQLException e){
-            throw new RuntimeException("Erro ao salvar no BD "+e.getMessage());
+            try (PreparedStatement stInsert = con.prepareStatement(sql)) {
+                stInsert.setLong(1, idGerado); // 1. Usa o ID gerado
+                stInsert.setLong(2, loteEstoque.getItem().getId()); // 2. ID do item
+                stInsert.setString(3, loteEstoque.getLote()); // 3. Número do lote
+                stInsert.setDate(4, java.sql.Date.valueOf(loteEstoque.getDataValidade())); // 4. Validade
+                stInsert.setInt(5, loteEstoque.getQuantidade()); // 5. Quantidade
+                stInsert.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar no BD: " + e.getMessage(), e);
         }
     }
 
