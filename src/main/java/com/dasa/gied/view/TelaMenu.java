@@ -76,6 +76,17 @@ public class TelaMenu extends JFrame {
 
             this.dispose();
         });
+        relatoriosButton.addActionListener(e -> {
+            JFrame frameRelatorio = new JFrame("Menu de Relatórios");
+            // Chama a nova TelaRelatorio que funciona como um menu
+            frameRelatorio.setContentPane(new TelaRelatorio(this.usuario).getPanel());
+            frameRelatorio.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frameRelatorio.pack();
+            frameRelatorio.setLocationRelativeTo(null);
+            frameRelatorio.setVisible(true);
+            this.dispose();
+        });
+
         alterarMinhaSenhaButton.addActionListener(e -> {
             // Cria um painel com os campos de senha
             JPanel alterarSenhaPanel = new JPanel();

@@ -2,8 +2,10 @@ package com.dasa.gied.view;
 
 import com.dasa.gied.dao.ItemDao;
 import com.dasa.gied.dao.LoteEstoqueDao;
+import com.dasa.gied.dao.MovimentacaoDao;
 import com.dasa.gied.dao.jdbc.JdbcItemDao;
 import com.dasa.gied.dao.jdbc.JdbcLoteEstoqueDao;
+import com.dasa.gied.dao.jdbc.JdbcMovimentacaoDao;
 import com.dasa.gied.domain.model.Usuario;
 import com.dasa.gied.domain.model.Item;
 import com.dasa.gied.domain.model.LoteEstoque;
@@ -25,7 +27,8 @@ public class TelaEstoque extends JFrame {
         // Instancia os DAOs e o Service
         ItemDao itemDao = new JdbcItemDao();
         LoteEstoqueDao loteEstoqueDao = new JdbcLoteEstoqueDao();
-        this.itemService = new ItemService(itemDao, loteEstoqueDao);
+        MovimentacaoDao movimentacaoDao = new JdbcMovimentacaoDao();
+        this.itemService = new ItemService(itemDao, loteEstoqueDao, movimentacaoDao);
 
         voltarButton.addActionListener(e -> {
             new TelaMenu(usuario);

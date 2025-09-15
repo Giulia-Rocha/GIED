@@ -2,21 +2,31 @@ package com.dasa.gied.service;
 
 import com.dasa.gied.dao.ItemDao;
 import com.dasa.gied.dao.LoteEstoqueDao;
+import com.dasa.gied.dao.MovimentacaoDao;
+import com.dasa.gied.domain.enums.TipoMovimentacao;
 import com.dasa.gied.domain.model.Item;
 import com.dasa.gied.domain.model.LoteEstoque;
+import com.dasa.gied.domain.model.Movimentacao;
 import com.dasa.gied.service.dto.ConsultaEstoqueDTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ItemService {
     private final ItemDao itemDao ;
-    private final LoteEstoqueDao loteEstoqueDao ;
+    private final LoteEstoqueDao loteEstoqueDao;
+    private final MovimentacaoDao movimentacaoDao;
 
-    public ItemService(ItemDao itemDao, LoteEstoqueDao loteEstoqueDao) {
+
+
+
+    public ItemService(ItemDao itemDao, LoteEstoqueDao loteEstoqueDao, MovimentacaoDao movimentacaoDao) {
         this.itemDao = itemDao;
         this.loteEstoqueDao = loteEstoqueDao;
+        this.movimentacaoDao = movimentacaoDao;
     }
+
 
     public void registrarEntrada(Long idItem, int quantidade, String numeroLote, LocalDate dataValidade){
         //validações de entrada
@@ -47,6 +57,8 @@ public class ItemService {
                             loteEstoqueDao.salvar(novoLote);
                         }
                 );
+        Movimentacao mov = new Movimentacao(null, LocalDateTime.now(), quantidade, TipoMovimentacao.ENTRADA);
+        movimentacaoDao.salvar(mov);
 
     }
     public void RegistrarSaida(Long idItem, int quantidade){
@@ -79,6 +91,8 @@ public class ItemService {
         if(quantidadeFinal > 0){
             throw new RuntimeException("Erro inesperado no cálculo de baixa de estoque. Estoque insuficiente.");
         }
+        Movimentacao mov = new Movimentacao(null, LocalDateTime.now(), quantidade, TipoMovimentacao.RETIRADA);
+        movimentacaoDao.salvar(mov);
     }
     public List<LoteEstoque> ConsultarEstoque(Long idItem){
         //1. validação do id
