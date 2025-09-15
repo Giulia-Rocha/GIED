@@ -105,6 +105,10 @@ public class TelaMovimentacoes  {
                     // Converte a string da data para LocalDate
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate dataValidade = LocalDate.parse(dataValidadeField.getText(), formatter);
+                    if (dataValidade.isBefore(LocalDate.now())) {
+                        // Se for, lança uma exceção com uma mensagem amigável.
+                        throw new IllegalArgumentException("A data de validade não pode ser anterior à data atual.");
+                    }
 
                     itemService.registrarEntrada(idItem, quantidade, lote, dataValidade);
 
