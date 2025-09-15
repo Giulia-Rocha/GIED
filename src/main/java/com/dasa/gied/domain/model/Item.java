@@ -30,9 +30,6 @@ public class Item {
 
     public Item(){}
 
-    public void verificarEstoque(){
-
-    }
 
     public Integer getQuantidadeNoEstoque() {
         return quantidadeNoEstoque;

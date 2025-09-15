@@ -92,7 +92,7 @@ public class ItemService {
 
     }
     public List<Item> listarEstoque(){
-       return itemDao.lisarTodos();
+       return itemDao.listarTodos();
     }
     public List<Item> listarEstoqueBaixo(){
         return itemDao.findByEstoqueBaixo();

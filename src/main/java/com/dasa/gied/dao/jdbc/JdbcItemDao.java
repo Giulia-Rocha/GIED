@@ -95,7 +95,7 @@ public class JdbcItemDao implements ItemDao {
     }
 
     @Override
-    public List<Item> lisarTodos() {
+    public List<Item> listarTodos() {
         String sql = "SELECT * FROM ITEM";
         List<Item> todosOsItens = new ArrayList<>();
         try (Connection con = OracleConnectionFactory.getConnection();

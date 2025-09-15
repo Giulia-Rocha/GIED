@@ -9,6 +9,6 @@ public interface ItemDao {
     void atualizar(Item item);
     void delete(Long id);
     Item getById(Long id);
-    List<Item> lisarTodos();
+    List<Item> listarTodos();
     List<Item> findByEstoqueBaixo();
 }

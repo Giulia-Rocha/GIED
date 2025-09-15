@@ -44,8 +44,8 @@ public class TelaEstoque extends JFrame {
                 StringBuilder sb = new StringBuilder("--- Lista Completa de Itens ---\n\n");
                 for (Item item : todosOsItens) {
                     sb.append("ID: ").append(item.getId())
-                            .append(", Nome: ").append(item.getNome())
-                            .append(", Descrição: ").append(item.getDescricao())
+                            .append("\nNome: ").append(item.getNome())
+                            .append("\nDescrição: ").append(item.getDescricao())
                             .append("\n");
                 }
 
